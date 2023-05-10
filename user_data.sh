@@ -18,3 +18,11 @@ echo "xpack.security.enabled: false"  >> /etc/elasticsearch/elasticsearch.yml
 echo "xpack.security.transport.ssl.enabled: false"  >> /etc/elasticsearch/elasticsearch.yml
 
 sudo systemctl restart elasticsearch.service
+
+#install s3 plugin
+sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install repository-s3
+
+#restart elasticsearch
+sudo systemctl restart elasticsearch.service
+
+
