@@ -18,3 +18,32 @@ echo "xpack.security.enabled: false"  >> /etc/elasticsearch/elasticsearch.yml
 echo "xpack.security.transport.ssl.enabled: false"  >> /etc/elasticsearch/elasticsearch.yml
 
 sudo systemctl restart elasticsearch.service
+
+# Install ElasticSearch exporter
+wget https://github.com/justwatchcom/elasticsearch_exporter/releases/download/v1.1.0rc1/elasticsearch_exporter-1.1.0rc1.linux-amd64.tar.gz
+tar -xvf elasticsearch_exporter-1.1.0rc1.linux-amd64.tar.gz
+cd elasticsearch_exporter-1.1.0rc1.linux-amd64/
+sudo cp elasticsearch_exporter /usr/local/bin/
+
+# Create a systemd service file for the exporter
+cat << EOF | sudo tee /etc/systemd/system/elasticsearch_exporter.service
+[Unit]
+Description=ElasticSearch exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/local/bin/elasticsearch_exporter
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd and start the exporter
+sudo systemctl daemon-reload
+sudo systemctl start elasticsearch_exporter
+sudo systemctl enable elasticsearch_exporter
+
+
