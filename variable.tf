@@ -176,3 +176,8 @@ variable "ami_id" {
   description = "AMI id of the Amazon Linux 2"
   default     = ""
 }
+
+variable "elasticsearch_private_ip"{
+  type = string
+  default = ""
+}
